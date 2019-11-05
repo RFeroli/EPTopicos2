@@ -1,2 +1,2 @@
 print("batata")
-print("frita")
+print("frita2")
