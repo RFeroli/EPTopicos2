@@ -1,1 +1,2 @@
 print("batata")
+print("frita")
