@@ -15,7 +15,7 @@ class iteracaoDeValor:
         #inicializacao com 0
         for estado in estados:
             estimativa[estado]=0;
-        grafico=Janela.Grafico (estados, 20, 20, estimativa)
+        grafico=Janela.Grafico (estados, 20, 20, estimativa,politica)
 
         while True :
             #cada iteracao e baseada em dois momentos
@@ -23,6 +23,7 @@ class iteracaoDeValor:
                 if estado == 'robot-at-x20y20':
                     estimativa[estado]=0
                     nova_estimativa[estado]=0
+                    politica[estado]="X"
                     continue
                 # sera calculada a equcao de belman para cada estado
                 minimo = 100000000
