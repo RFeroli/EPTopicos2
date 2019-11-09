@@ -1,6 +1,6 @@
 from decimal import Decimal
 from os import listdir
-from main import Acao
+from main import IteracaoDeValor
 
 path = '../in/'
 
@@ -50,9 +50,5 @@ deterministic_instances = read_directory('DeterministicGoalState/', path)
 random_instances = read_directory('RandomGoalState/', path)
 
 
-ms=Acao.acao(deterministic_instances["navigation_1.net"]["action"]["move-south"])
-#t=ms.aplicar('robot-at-x10y1')
-for _ in range(50):
-    print('robot-at-x10y1')
-print(deterministic_instances.keys())
-print(random_instances.keys())
+deterministic_instances["navigation_1.net"]["action"]["move-south"]
+IteracaoDeValor.iteracaoDeValor().aplicar(deterministic_instances["navigation_1.net"]["states"],deterministic_instances["navigation_1.net"]["action"],0.1)
