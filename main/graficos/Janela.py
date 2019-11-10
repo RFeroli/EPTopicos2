@@ -38,7 +38,7 @@ class Grafico:
             i =int(re.search ('x(.*)y', estado).group(1))-1
             j = int(re.search ('y(.*)', estado).group (1))
             j=(h-j)
-            self.grid[estado]=self.canvas.create_rectangle (i*(altura+2), j*(largura+2),(i*(altura+2))+altura ,(j*(largura+2))+largura, fill="blue", outline='black')
+            self.grid[estado]=self.canvas.create_rectangle (i*(altura+2), j*(largura+2),(i*(altura+2))+altura ,(j*(largura+2))+largura, fill="blue")
             x1=(i*(altura+2)+(i*(altura+2))+altura)/2
             x2=x1;
             y1=j*(largura+2)
@@ -47,7 +47,7 @@ class Grafico:
             self.arrows[estado]=self.canvas.create_line (x1,y1,x2,y2, width=2, tags="tudo",arrow=tk.LAST,fill='blue')
     def atualizar(self):
         for estado in self.estimativa:
-            self.canvas.itemconfig (self.grid[estado], fill=ColorUtils.toHex(int(self.estimativa[estado]*5),0,0))
+            self.canvas.itemconfig (self.grid[estado], fill=ColorUtils.toHex(int(self.estimativa[estado]*5),int(self.estimativa[estado]*5),int(self.estimativa[estado]*5)))
             self.atualiza_seta(estado,self.politica[estado])
 
     def seta_cima(self,celula,seta):
