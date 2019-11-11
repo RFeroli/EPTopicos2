@@ -1,7 +1,7 @@
 from decimal import Decimal
 from os import listdir
 from main import IteracaoDeValor
-
+from main.LAO_star import LAO_star
 path = '../in/'
 
 def read_directory(dir, path=''):
@@ -49,6 +49,15 @@ def read_directory(dir, path=''):
 deterministic_instances = read_directory('DeterministicGoalState/', path)
 random_instances = read_directory('RandomGoalState/', path)
 
-
+''# for p in deterministic_instances:
+import time
+l = ['navigation_1.net', 'navigation_2.net', 'navigation_3.net', 'navigation_4.net', 'navigation_5.net',
+     'navigation_6.net', 'navigation_7.net', 'navigation_8.net', 'navigation_9.net', 'navigation_10.net']
+for p in l:
+    print('Executando o problema {}'.format(p))
+    t = time.time()
+    meta_plano, contador_gerados = LAO_star(deterministic_instances[p])
+    print('Executado em {} seg\n O plano tem comprimento {} e {} estados foram visitados'.format(time.time()-t, len(meta_plano), contador_gerados))
+exit()
 deterministic_instances["navigation_1.net"]["action"]["move-south"]
 IteracaoDeValor.iteracaoDeValor().aplicar(deterministic_instances["navigation_1.net"]["states"],deterministic_instances["navigation_1.net"]["action"],0.1)
