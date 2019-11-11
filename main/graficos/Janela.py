@@ -13,7 +13,6 @@ LARGURA=500
 class Grafico:
     def __init__(self,estados,h,w,estimativa,politica):
         this=self
-        self.estimativa=estimativa
         self.politica=politica
         def initialization():
             this.raiz = Tk ()
@@ -45,9 +44,9 @@ class Grafico:
             y2=(j*(largura+2))+largura
 
             self.arrows[estado]=self.canvas.create_line (x1,y1,x2,y2, width=2, tags="tudo",arrow=tk.LAST,fill='blue')
-    def atualizar(self):
-        for estado in self.estimativa:
-            self.canvas.itemconfig (self.grid[estado], fill=ColorUtils.toHex(int(self.estimativa[estado]*5),int(self.estimativa[estado]*5),int(self.estimativa[estado]*5)))
+    def atualizar(self,estimativa):
+        for estado in estimativa:
+            self.canvas.itemconfig (self.grid[estado], fill=ColorUtils.toHex(int(estimativa[estado]*3),int(estimativa[estado]*3),int(estimativa[estado]*3)))
             self.atualiza_seta(estado,self.politica[estado])
 
     def seta_cima(self,celula,seta):

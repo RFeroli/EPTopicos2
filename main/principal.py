@@ -1,3 +1,4 @@
+import time
 from decimal import Decimal
 from os import listdir
 from main import IteracaoDeValor
@@ -51,4 +52,7 @@ random_instances = read_directory('RandomGoalState/', path)
 
 
 deterministic_instances["navigation_1.net"]["action"]["move-south"]
+tempo_inicial = time.time ()
 IteracaoDeValor.iteracaoDeValor().aplicar(deterministic_instances["navigation_1.net"]["states"],deterministic_instances["navigation_1.net"]["action"],0.1)
+tempo_execucao = round((time.time()-tempo_inicial)*1000)
+print(tempo_execucao)
