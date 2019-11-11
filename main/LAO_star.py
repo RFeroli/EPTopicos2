@@ -67,25 +67,27 @@ def lista_vizinhos_operacoes(problema, estado):
 
 
 def atualiza_custo(problema, estado, custo_estado, no_pai):
-    h_e = _gere_hash(estado)
 
-    dict = lista_vizinhos_operacoes(problema, estado)
-    custos = []
-    def retorna_valor(est):
-        if estado == est:
-            return 'x'
-        return custo_estado[_gere_hash(est)][0]
-    saida = []
-    for operacao in dict:
+    while True:
+        h_e = _gere_hash(estado)
+        dict = lista_vizinhos_operacoes(problema, estado)
+        def retorna_valor(est):
+            if estado == est:
+                return 'x'
+            return custo_estado[_gere_hash(est)][0]
+        saida = []
+        for operacao in dict:
 
-        s = '1 + ' + ' + '.join([str(retorna_valor(x[0]))+'*'+str(round(x[1],2)) for x in dict[operacao]]) + ' - x'
-        x = symbols('x')
-        saida += solve(s, x)
+            s = '1 + ' + ' + '.join([str(retorna_valor(x[0]))+'*'+str(round(x[1],2)) for x in dict[operacao]]) + ' - x'
+            x = symbols('x')
+            saida += solve(s, x)
 
-    custo_estado[h_e][0] = min(saida)
-    if no_pai[h_e] is None:
+        custo_estado[h_e][0] = min(saida)
+        if no_pai[h_e] is None:
+            return
         return
-    atualiza_custo(problema, no_pai[h_e][0], custo_estado, no_pai)
+        # estado = no_pai[h_e][0]
+    # atualiza_custo(problema, no_pai[h_e][0], custo_estado, no_pai)
 
 
 
