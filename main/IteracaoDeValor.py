@@ -20,7 +20,7 @@ class iteracaoDeValor:
         while True :
             #cada iteracao e baseada em dois momentos
             for estado in estados:
-                if estado == 'robot-at-x20y20':
+                if estado == 'robot-at-x10y10':
                     estimativa[estado]=0
                     nova_estimativa[estado]=0
                     politica[estado]="X"
