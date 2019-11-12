@@ -1,10 +1,11 @@
 from main.graficos import Janela
-
+import math
 
 class iteracaoDeValor:
-    def aplicar(self,estados,acoes,alpha):
+    def aplicar(self, problema,alpha):
 
-
+        estados = problema['states']
+        acoes = problema['action']
         politica={}
         #inicializacao
         estimativa={}
@@ -22,13 +23,13 @@ class iteracaoDeValor:
             nova_estimativa = {}
             #cada iteracao e baseada em dois momentos
             for estado in estados:
-                if estado == 'robot-at-x20y20':
+                if estado == problema['goalstate']:
                     estimativa[estado]=0
                     nova_estimativa[estado]=0
                     politica[estado]="X"
                     continue
                 # sera calculada a equcao de belman para cada estado
-                minimo = 100000000
+                minimo = math.inf
                 min_arg = None
                 for acao in acoes:
                     somatorio=0
