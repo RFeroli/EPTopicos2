@@ -13,23 +13,22 @@ problemas_nomes = [ 'navigation_1.net', 'navigation_2.net', 'navigation_3.net', 
 
 
 print('Problemas determinísticos\n')
+gerar_graficos = False
 for p in problemas_nomes:
     print('\nExecutando o problema {}'.format(p))
-    print('LAO * {}')
     t = time.time()
-    LAO_star(deterministic_instances[p])
+    LAO_star(deterministic_instances[p], gerar_graficos)
     print('LAO * Executado em {} seg\n'.format(time.time() - t))
     t = time.time()
-    IteracaoDeValor.iteracaoDeValor().aplicar(deterministic_instances[p])
+    IteracaoDeValor.iteracaoDeValor().aplicar(problema=deterministic_instances[p], alpha=1, gerar_graficos=gerar_graficos)
     print('Iteracao de Valor Executado em {} seg'.format(time.time()-t))
 
 print('\n\nProblemas aleatórios\n')
 for p in problemas_nomes:
     print('Executando o problema {}'.format(p))
-    print('LAO * {}')
     t = time.time()
-    LAO_star(random_instances[p])
+    LAO_star(random_instances[p], gerar_graficos)
     print('LAO * Executado em {} seg\n'.format(time.time() - t))
     t = time.time()
-    IteracaoDeValor.iteracaoDeValor().aplicar(random_instances[p])
+    IteracaoDeValor.iteracaoDeValor().aplicar(problema=random_instances[p], alpha=1, gerar_graficos=gerar_graficos)
     print('Iteracao de Valor Executado em {} seg\n'.format(time.time()-t))

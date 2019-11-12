@@ -88,7 +88,7 @@ def atualiza_custo(problema, estado, custo_estado):
 
 
 
-def LAO_star(problema):
+def LAO_star(problema, gerar_graficos):
 
     fila_prioridade = PriorityQueue()
     inicio = problema['initialstate']
@@ -135,6 +135,7 @@ def LAO_star(problema):
 
         atualiza_custo(problema, atual, custo_estado)
 
+    # print(len(meta_plano))
     # Aqui gera os gráficos com a politica a partir de "meta_plano"
 
 

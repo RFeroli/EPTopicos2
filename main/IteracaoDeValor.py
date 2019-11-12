@@ -2,7 +2,7 @@ from main.graficos import Janela
 import math
 
 class iteracaoDeValor:
-    def aplicar(self, problema,alpha):
+    def aplicar(self, problema, alpha, gerar_graficos):
 
         estados = problema['states']
         acoes = problema['action']
@@ -15,7 +15,7 @@ class iteracaoDeValor:
 
         #inicializacao com 0
         for estado in estados:
-            estimativa[estado]=0;
+            estimativa[estado]=0
         grafico=Janela.Grafico (estados, 20, 20, estimativa,politica)
 
         while True :
@@ -44,11 +44,11 @@ class iteracaoDeValor:
 
                 politica[estado]=min_arg
                 nova_estimativa[estado]=minimo
-                delta+=minimo-estimativa[estado];
+                delta+=minimo-estimativa[estado]
 
             #repassar as estimativas
 
-            estimativa=nova_estimativa;
+            estimativa=nova_estimativa
             grafico.atualizar (estimativa)
             if alpha>(delta/len(estimativa)):
                 break
