@@ -98,7 +98,6 @@ def LAO_star(problema):
     no_pai = {}
 
     hsi = _gere_hash(inicio)
-    contador_gerados = 1
     no_pai[hsi] = None
     custo_estado = {}
     custo_estado[hsi] = [calcula_heuristica(inicio, meta),inicio]
@@ -131,26 +130,26 @@ def LAO_star(problema):
 
             if vizinho_h not in nos_expandidos:
                 custo_estado[vizinho_h] = [novo_custo, vizinho]
-                contador_gerados += 1
                 no_pai[vizinho_h] = [atual, operacao]
                 fila_prioridade.put(vizinho, novo_custo)
 
         atualiza_custo(problema, atual, custo_estado)
-    # Esses dicionarios sao usados para extrair a solucao
-    # return came_from, custo_neste_momento, nos_expandidos
-    return meta_plano, contador_gerados
+
+    # Aqui gera os gráficos com a politica a partir de "meta_plano"
 
 
 
-problema = {
-'states': ['robot-at-x1y1', 'robot-at-x2y1', 'robot-at-x3y1', 'robot-at-x1y2', 'robot-at-x2y2', 'robot-at-x3y2', 'robot-at-x1y3', 'robot-at-x2y3', 'robot-at-x3y3'],
 
-'action': {
-'move-south': {'robot-at-x1y1': [('robot-at-x1y1', Decimal('1.000000'))], 'robot-at-x2y1': [('robot-at-x2y1', Decimal('1.000000'))], 'robot-at-x3y1': [('robot-at-x3y1', Decimal('1.000000'))], 'robot-at-x1y2': [('robot-at-x1y1', Decimal('0.500000')), ('robot-at-x1y2', Decimal('0.500000'))], 'robot-at-x2y2': [('robot-at-x2y1', Decimal('0.500000')), ('robot-at-x2y2', Decimal('0.500000'))], 'robot-at-x3y2': [('robot-at-x3y1', Decimal('0.500000')), ('robot-at-x3y2', Decimal('0.500000'))], 'robot-at-x1y3': [('robot-at-x1y2', Decimal('0.500000')), ('robot-at-x1y3', Decimal('0.500000'))], 'robot-at-x2y3': [('robot-at-x2y3', Decimal('1.000000'))], 'robot-at-x3y3': [('robot-at-x3y2', Decimal('0.500000')), ('robot-at-x3y3', Decimal('0.500000'))]},
-
-'move-north': {'robot-at-x1y1': [('robot-at-x1y2', Decimal('0.500000')), ('robot-at-x1y1', Decimal('0.500000'))], 'robot-at-x2y1': [('robot-at-x2y1', Decimal('1.0000000'))], 'robot-at-x3y1': [('robot-at-x3y2', Decimal('0.500000')), ('robot-at-x3y1', Decimal('0.500000'))], 'robot-at-x1y2': [('robot-at-x1y3', Decimal('0.500000')), ('robot-at-x1y2', Decimal('0.500000'))], 'robot-at-x2y2': [('robot-at-x2y2', Decimal('1.000000'))], 'robot-at-x3y2': [('robot-at-x3y3', Decimal('0.500000')), ('robot-at-x3y2', Decimal('0.500000'))], 'robot-at-x1y3': [('robot-at-x1y3', Decimal('1.000000'))], 'robot-at-x2y3': [('robot-at-x2y3', Decimal('1.000000'))], 'robot-at-x3y3': [('robot-at-x3y3', Decimal('1.000000'))]},
-
-'move-east': {'robot-at-x1y1': [('robot-at-x2y1', Decimal('0.500000')), ('robot-at-x1y1', Decimal('0.500000'))], 'robot-at-x2y1': [('robot-at-x3y1', Decimal('0.500000')), ('robot-at-x2y1', Decimal('0.500000'))], 'robot-at-x3y1': [('robot-at-x3y1', Decimal('1.000000'))], 'robot-at-x1y2': [('robot-at-x1y2', Decimal('1.000000'))], 'robot-at-x2y2': [('robot-at-x2y2', Decimal('1.000000'))], 'robot-at-x3y2': [('robot-at-x3y2', Decimal('1.000000'))], 'robot-at-x1y3': [('robot-at-x2y3', Decimal('0.500000')), ('robot-at-x1y3', Decimal('0.500000'))], 'robot-at-x2y3': [('robot-at-x3y3', Decimal('0.500000')), ('robot-at-x2y3', Decimal('0.500000'))], 'robot-at-x3y3': [('robot-at-x3y3', Decimal('1.000000'))]}}, 'cost': [], 'initialstate': 'robot-at-x1y2', 'goalstate': 'robot-at-x3y3'}
-
-
-LAO_star(problema)
+# problema = {
+# 'states': ['robot-at-x1y1', 'robot-at-x2y1', 'robot-at-x3y1', 'robot-at-x1y2', 'robot-at-x2y2', 'robot-at-x3y2', 'robot-at-x1y3', 'robot-at-x2y3', 'robot-at-x3y3'],
+#
+# 'action': {
+# 'move-south': {'robot-at-x1y1': [('robot-at-x1y1', Decimal('1.000000'))], 'robot-at-x2y1': [('robot-at-x2y1', Decimal('1.000000'))], 'robot-at-x3y1': [('robot-at-x3y1', Decimal('1.000000'))], 'robot-at-x1y2': [('robot-at-x1y1', Decimal('0.500000')), ('robot-at-x1y2', Decimal('0.500000'))], 'robot-at-x2y2': [('robot-at-x2y1', Decimal('0.500000')), ('robot-at-x2y2', Decimal('0.500000'))], 'robot-at-x3y2': [('robot-at-x3y1', Decimal('0.500000')), ('robot-at-x3y2', Decimal('0.500000'))], 'robot-at-x1y3': [('robot-at-x1y2', Decimal('0.500000')), ('robot-at-x1y3', Decimal('0.500000'))], 'robot-at-x2y3': [('robot-at-x2y3', Decimal('1.000000'))], 'robot-at-x3y3': [('robot-at-x3y2', Decimal('0.500000')), ('robot-at-x3y3', Decimal('0.500000'))]},
+#
+# 'move-north': {'robot-at-x1y1': [('robot-at-x1y2', Decimal('0.500000')), ('robot-at-x1y1', Decimal('0.500000'))], 'robot-at-x2y1': [('robot-at-x2y1', Decimal('1.0000000'))], 'robot-at-x3y1': [('robot-at-x3y2', Decimal('0.500000')), ('robot-at-x3y1', Decimal('0.500000'))], 'robot-at-x1y2': [('robot-at-x1y3', Decimal('0.500000')), ('robot-at-x1y2', Decimal('0.500000'))], 'robot-at-x2y2': [('robot-at-x2y2', Decimal('1.000000'))], 'robot-at-x3y2': [('robot-at-x3y3', Decimal('0.500000')), ('robot-at-x3y2', Decimal('0.500000'))], 'robot-at-x1y3': [('robot-at-x1y3', Decimal('1.000000'))], 'robot-at-x2y3': [('robot-at-x2y3', Decimal('1.000000'))], 'robot-at-x3y3': [('robot-at-x3y3', Decimal('1.000000'))]},
+#
+# 'move-east': {'robot-at-x1y1': [('robot-at-x2y1', Decimal('0.500000')), ('robot-at-x1y1', Decimal('0.500000'))], 'robot-at-x2y1': [('robot-at-x3y1', Decimal('0.500000')), ('robot-at-x2y1', Decimal('0.500000'))], 'robot-at-x3y1': [('robot-at-x3y1', Decimal('1.000000'))], 'robot-at-x1y2': [('robot-at-x1y2', Decimal('1.000000'))], 'robot-at-x2y2': [('robot-at-x2y2', Decimal('1.000000'))], 'robot-at-x3y2': [('robot-at-x3y2', Decimal('1.000000'))], 'robot-at-x1y3': [('robot-at-x2y3', Decimal('0.500000')), ('robot-at-x1y3', Decimal('0.500000'))], 'robot-at-x2y3': [('robot-at-x3y3', Decimal('0.500000')), ('robot-at-x2y3', Decimal('0.500000'))], 'robot-at-x3y3': [('robot-at-x3y3', Decimal('1.000000'))]}},
+# 'cost': [], 'initialstate': 'robot-at-x1y2', 'goalstate': 'robot-at-x3y3'}
+#
+#
+# LAO_star(problema)
