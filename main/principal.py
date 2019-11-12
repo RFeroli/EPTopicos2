@@ -14,23 +14,22 @@ problemas_nomes = [ 'navigation_1.net', 'navigation_2.net', 'navigation_3.net', 
 
 print('Problemas determinísticos\n')
 for p in problemas_nomes:
-    print('Executando o problema {}'.format(p))
+    print('\nExecutando o problema {}'.format(p))
     print('LAO * {}')
     t = time.time()
     LAO_star(deterministic_instances[p])
-    print('Executado em {} seg\n O plano tem comprimento {} e {} estados foram visitados\n'.format(time.time() - t,
-                                                                                                   len(meta_plano),
-                                                                                                   contador_gerados))
+    print('LAO * Executado em {} seg\n'.format(time.time() - t))
+    t = time.time()
     IteracaoDeValor.iteracaoDeValor().aplicar(deterministic_instances[p])
-    print('Executado em {} seg\n O plano tem comprimento {} e {} estados foram visitados\n'.format(time.time()-t, len(meta_plano), contador_gerados))
+    print('Iteracao de Valor Executado em {} seg'.format(time.time()-t))
 
 print('\n\nProblemas aleatórios\n')
 for p in problemas_nomes:
     print('Executando o problema {}'.format(p))
+    print('LAO * {}')
     t = time.time()
     LAO_star(random_instances[p])
-    print('Executado em {} seg\n O plano tem comprimento {} e {} estados foram visitados\n'.format(time.time()-t, len(meta_plano), contador_gerados))
-
-
-exit()
-IteracaoDeValor.iteracaoDeValor().aplicar(deterministic_instances["navigation_1.net"]["states"],deterministic_instances["navigation_1.net"]["action"],0.1)
+    print('LAO * Executado em {} seg\n'.format(time.time() - t))
+    t = time.time()
+    IteracaoDeValor.iteracaoDeValor().aplicar(random_instances[p])
+    print('Iteracao de Valor Executado em {} seg\n'.format(time.time()-t))
