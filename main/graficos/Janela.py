@@ -33,7 +33,7 @@ class Grafico:
         largura=(LARGURA/w)-2
         self.grid={}
         self.arrows={}
-        for estado in estimativa:
+        for estado in estados:
             i =int(re.search ('x(.*)y', estado).group(1))-1
             j = int(re.search ('y(.*)', estado).group (1))
             j=(h-j)
@@ -44,10 +44,10 @@ class Grafico:
             y2=(j*(largura+2))+largura
 
             self.arrows[estado]=self.canvas.create_line (x1,y1,x2,y2, width=2, tags="tudo",arrow=tk.LAST,fill='blue')
-    def atualizar(self,estimativa):
-        for estado in estimativa:
+    def atualizar(self,estimativa, politica):
+        for estado in politica:
             self.canvas.itemconfig (self.grid[estado], fill=ColorUtils.toHex(int(estimativa[estado]*3),int(estimativa[estado]*3),int(estimativa[estado]*3)))
-            self.atualiza_seta(estado,self.politica[estado])
+            self.atualiza_seta(estado, politica[estado])
 
     def seta_cima(self,celula,seta):
         cordenadas=self.canvas.coords(celula)

@@ -4103,11 +4103,11 @@ cost
 endcost
 
 initialstate
-	robot-at-x1y1
+	robot-at-x10y5
 endinitialstate
 
 goalstate
-	robot-at-x20y20
+	robot-at-x10y10
 endgoalstate
 
 Grid:

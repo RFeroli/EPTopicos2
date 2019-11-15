@@ -19,9 +19,9 @@ for p in problemas_nomes:
     t = time.time()
     LAO_star(deterministic_instances[p], gerar_graficos)
     print('LAO * Executado em {} seg\n'.format(time.time() - t))
-    t = time.time()
-    IteracaoDeValor.iteracaoDeValor().aplicar(problema=deterministic_instances[p], alpha=1, gerar_graficos=gerar_graficos)
-    print('Iteracao de Valor Executado em {} seg'.format(time.time()-t))
+    # t = time.time()
+    # IteracaoDeValor.iteracaoDeValor().aplicar(problema=deterministic_instances[p], alpha=0.1, gerar_graficos=gerar_graficos)
+    # print('Iteracao de Valor Executado em {} seg'.format(time.time()-t))
 
 print('\n\nProblemas aleatórios\n')
 for p in problemas_nomes:
@@ -29,6 +29,6 @@ for p in problemas_nomes:
     t = time.time()
     LAO_star(random_instances[p], gerar_graficos)
     print('LAO * Executado em {} seg\n'.format(time.time() - t))
-    t = time.time()
-    IteracaoDeValor.iteracaoDeValor().aplicar(problema=random_instances[p], alpha=1, gerar_graficos=gerar_graficos)
-    print('Iteracao de Valor Executado em {} seg\n'.format(time.time()-t))
+    # t = time.time()
+    # IteracaoDeValor.iteracaoDeValor().aplicar(problema=random_instances[p], alpha=0.1, gerar_graficos=gerar_graficos)
+    # print('Iteracao de Valor Executado em {} seg\n'.format(time.time()-t))

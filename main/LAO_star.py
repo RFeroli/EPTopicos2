@@ -1,10 +1,11 @@
+import random
 import re
 import hashlib
 import base64
 import heapq
 import math
 from _decimal import Decimal
-
+from main.graficos import Janela
 from sympy import solve, symbols
 
 
@@ -22,6 +23,70 @@ class PriorityQueue:
             pass
     def get(self):
         return heapq.heappop(self.elements)[1]
+
+
+def aplicar(estados, no_pai, estimativa_inicial, acoes, meta, alpha=0.0001):
+
+    # estados = problema['states']
+    # acoes = problema['action']
+    politica={}
+    #inicializacao
+    estimativa={}
+
+
+    #inicializacao das primeiras estimativas
+
+    #inicializacao com 0
+    for estado in estimativa_inicial:
+        estimativa[estado]=estimativa_inicial[estado]
+    # grafico=Janela.Grafico (estados, 20, 20, estimativa,politica)
+    contador = 0
+    while True :
+        contador+=1
+        delta=0
+        nova_estimativa = {}
+        #cada iteracao e baseada em dois momentos
+        for estado in estados:
+            if estado == meta:
+                estimativa[estado]=0
+                nova_estimativa[estado]=0
+                politica[estado]='move-north'
+                continue
+            # sera calculada a equcao de belman para cada estado
+            minimo = math.inf
+            min_arg = None
+            for acao in acoes:
+                somatorio=0
+                for tupla in acoes[acao][estado]: #para cada sucessor
+                    sucessor=tupla[0]
+                    probabilidade=tupla[1]
+                    somatorio+=probabilidade*(1+estimativa[sucessor]) #equacao de belman
+                    pass
+                if somatorio <minimo:
+                    minimo=somatorio
+                    min_arg=acao
+
+            politica[estado]=min_arg
+            nova_estimativa[estado]=minimo
+            delta+=minimo-estimativa[estado]
+
+        #repassar as estimativas
+        for i in nova_estimativa:
+            estimativa[i]=nova_estimativa[i]
+        # grafico.atualizar (estimativa, politica)
+        if alpha>(delta/len(estimativa)):
+            break
+
+    proximos_expansiveis = set()
+    for x in politica:
+        for t in acoes[politica[x]][x]:
+            if t[0] not in estados:
+                proximos_expansiveis.add(t[0])
+    # proximos_expansiveis = [acoes[politica[x]][x] for x in politica]
+    print(contador)
+    return politica, proximos_expansiveis
+
+
 
 def calcula_heuristica(estado, meta):
     _, xe, ye = re.split('x|y',estado)
@@ -58,7 +123,7 @@ def lista_vizinhos(problema, estado):
     for action in problema['action']:
         for l in problema['action'][action][estado]:
             if l[0] != estado:
-                d.append([l[0], action])
+                d.append(l[0])
 
     return d
 
@@ -87,60 +152,53 @@ def atualiza_custo(problema, estado, custo_estado):
     # atualiza_custo(problema, no_pai[h_e][0], custo_estado, no_pai)
 
 
+def retorna_proximo_expandido(conjunto):
+    elem = random.sample(conjunto, 1)[0]
+    conjunto.remove(elem)
+    return elem
 
 def LAO_star(problema, gerar_graficos):
 
-    fila_prioridade = PriorityQueue()
     inicio = problema['initialstate']
     meta = problema['goalstate']
-    fila_prioridade.put(inicio, 0)
+
+    heuristica_inicio = calcula_heuristica(inicio, meta)
+    estimativa = {inicio:heuristica_inicio}
     nos_expandidos = set()
+    politica = {inicio:None}
+    nos_folhas = {inicio}
     no_pai = {}
 
-    hsi = _gere_hash(inicio)
-    no_pai[hsi] = None
-    custo_estado = {}
-    custo_estado[hsi] = [calcula_heuristica(inicio, meta),inicio]
+    no_pai[inicio] = set()
     meta_plano = []
-
-    while not fila_prioridade.empty():
-        atual = fila_prioridade.get()
-        hatual = _gere_hash(atual)
-        if hatual in nos_expandidos:
-            continue
-
-        nos_expandidos.add(hatual)
-        if equivalentes(atual, meta):
-            hsi = _gere_hash(atual)
-            meta_plano.insert(0, [atual, None, 0])
-            # atualiza_custo(problema, atual, custo_estado)
-            while no_pai[hsi] is not None:
-                atualiza_custo(problema, no_pai[hsi][0], custo_estado)
-                aux = _gere_hash(no_pai[hsi][0])
-                meta_plano.insert(0, no_pai[hsi] + [custo_estado[aux][0]])
-                hsi = aux
-            break
+    grafico = Janela.Grafico(problema['states'], 20, 20, estimativa, problema['states'])
+    while nos_folhas:
+        grafico.atualizar(estimativa, politica)
+        atual = retorna_proximo_expandido(nos_folhas)
 
 
-        for vizinho_op in lista_vizinhos(problema, atual):
-            vizinho = vizinho_op[0]
-            operacao = vizinho_op[1]
-            vizinho_h= _gere_hash(vizinho)
-            novo_custo = calcula_heuristica(vizinho, meta)
+        for vizinho in lista_vizinhos(problema, atual):
+            no_pai[vizinho] = no_pai.get(vizinho, set())
+            no_pai[vizinho].add(atual)
 
-            if vizinho_h not in nos_expandidos:
-                custo_estado[vizinho_h] = [novo_custo, vizinho]
-                no_pai[vizinho_h] = [atual, operacao]
-                fila_prioridade.put(vizinho, novo_custo)
+            if vizinho in nos_expandidos:
+                continue
 
-        atualiza_custo(problema, atual, custo_estado)
+            nos_folhas.add(vizinho)
+            if equivalentes(atual, meta):
+                estimativa[vizinho] = 0
+            else:
+                estimativa[vizinho] = calcula_heuristica(vizinho, meta)
+        nos_expandidos.add(atual)
 
-    # print(len(meta_plano))
-    # Aqui gera os gráficos com a politica a partir de "meta_plano"
-
-
-
-
+        grafico.atualizar(estimativa, politica)
+        politica, nos_folhas = aplicar(nos_expandidos, no_pai, estimativa, problema['action'], meta)
+        for p in politica:
+            for i in problema['action'][politica[p]][p]:
+                if i[0] != p:
+                    no_pai[i[0]] = no_pai.get(i[0], set())
+                    no_pai[i[0]].add(p)
+#
 # problema = {
 # 'states': ['robot-at-x1y1', 'robot-at-x2y1', 'robot-at-x3y1', 'robot-at-x1y2', 'robot-at-x2y2', 'robot-at-x3y2', 'robot-at-x1y3', 'robot-at-x2y3', 'robot-at-x3y3'],
 #
@@ -152,5 +210,6 @@ def LAO_star(problema, gerar_graficos):
 # 'move-east': {'robot-at-x1y1': [('robot-at-x2y1', Decimal('0.500000')), ('robot-at-x1y1', Decimal('0.500000'))], 'robot-at-x2y1': [('robot-at-x3y1', Decimal('0.500000')), ('robot-at-x2y1', Decimal('0.500000'))], 'robot-at-x3y1': [('robot-at-x3y1', Decimal('1.000000'))], 'robot-at-x1y2': [('robot-at-x1y2', Decimal('1.000000'))], 'robot-at-x2y2': [('robot-at-x2y2', Decimal('1.000000'))], 'robot-at-x3y2': [('robot-at-x3y2', Decimal('1.000000'))], 'robot-at-x1y3': [('robot-at-x2y3', Decimal('0.500000')), ('robot-at-x1y3', Decimal('0.500000'))], 'robot-at-x2y3': [('robot-at-x3y3', Decimal('0.500000')), ('robot-at-x2y3', Decimal('0.500000'))], 'robot-at-x3y3': [('robot-at-x3y3', Decimal('1.000000'))]}},
 # 'cost': [], 'initialstate': 'robot-at-x1y2', 'goalstate': 'robot-at-x3y3'}
 #
+# # aplicar(problema)
 #
-# LAO_star(problema)
+# LAO_star(problema, 1)
