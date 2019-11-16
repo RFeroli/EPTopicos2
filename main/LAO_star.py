@@ -25,20 +25,20 @@ class PriorityQueue:
         return heapq.heappop(self.elements)[1]
 
 
-def aplicar(estados, no_pai, estimativa_inicial, acoes, meta, alpha=0.0001):
+def aplicar(estados, no_pai, estimativa, acoes, meta, alpha=0.001):
 
     # estados = problema['states']
     # acoes = problema['action']
     politica={}
     #inicializacao
-    estimativa={}
+    # estimativa={}
 
 
     #inicializacao das primeiras estimativas
 
     #inicializacao com 0
-    for estado in estimativa_inicial:
-        estimativa[estado]=estimativa_inicial[estado]
+    # for estado in estimativa_inicial:
+    #     estimativa[estado]=estimativa_inicial[estado]
     # grafico=Janela.Grafico (estados, 20, 20, estimativa,politica)
     contador = 0
     while True :
@@ -91,7 +91,7 @@ def aplicar(estados, no_pai, estimativa_inicial, acoes, meta, alpha=0.0001):
 def calcula_heuristica(estado, meta):
     _, xe, ye = re.split('x|y',estado)
     _, xm, ym = re.split('x|y', meta)
-    return abs(int(xe)-int(xm)) + abs(int(ye)-int(ym))
+    return (abs(int(xe)-int(xm)) + abs(int(ye)-int(ym)))
 
 
 def make_hashable(o):
@@ -124,32 +124,10 @@ def lista_vizinhos(problema, estado):
         for l in problema['action'][action][estado]:
             if l[0] != estado:
                 d.append(l[0])
-
     return d
 
 def lista_vizinhos_operacoes(problema, estado):
     return {action:problema['action'][action][estado] for action in problema['action']}
-
-
-def atualiza_custo(problema, estado, custo_estado):
-
-    h_e = _gere_hash(estado)
-    dict = lista_vizinhos_operacoes(problema, estado)
-    def retorna_valor(est):
-        if estado == est:
-            return 'x'
-        return custo_estado[_gere_hash(est)][0]
-    saida = []
-    for operacao in dict:
-
-        s = '1 + ' + ' + '.join([str(retorna_valor(x[0]))+'*'+str(round(x[1],2)) for x in dict[operacao]]) + ' - x'
-        x = symbols('x')
-        saida += solve(s, x)
-
-    custo_estado[h_e][0] = min(saida)
-
-        # estado = no_pai[h_e][0]
-    # atualiza_custo(problema, no_pai[h_e][0], custo_estado, no_pai)
 
 
 def retorna_proximo_expandido(conjunto):
@@ -198,7 +176,7 @@ def LAO_star(problema, gerar_graficos):
                 if i[0] != p:
                     no_pai[i[0]] = no_pai.get(i[0], set())
                     no_pai[i[0]].add(p)
-#
+# #
 # problema = {
 # 'states': ['robot-at-x1y1', 'robot-at-x2y1', 'robot-at-x3y1', 'robot-at-x1y2', 'robot-at-x2y2', 'robot-at-x3y2', 'robot-at-x1y3', 'robot-at-x2y3', 'robot-at-x3y3'],
 #
