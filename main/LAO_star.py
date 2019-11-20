@@ -83,7 +83,7 @@ def aplicar(estados, no_pai, estimativa, acoes, meta, alpha=0.001):
             if t[0] not in estados:
                 proximos_expansiveis.add(t[0])
     # proximos_expansiveis = [acoes[politica[x]][x] for x in politica]
-    print(contador)
+    #print(contador)
     return politica, proximos_expansiveis
 
 
@@ -149,9 +149,9 @@ def LAO_star(problema, gerar_graficos):
 
     no_pai[inicio] = set()
     meta_plano = []
-    grafico = Janela.Grafico(problema['states'], 20, 20, estimativa, problema['states'])
+   # grafico = Janela.Grafico(problema['states'], 20, 20, estimativa, problema['states'])
     while nos_folhas:
-        grafico.atualizar(estimativa, politica)
+        #grafico.atualizar(estimativa, politica)
         atual = retorna_proximo_expandido(nos_folhas)
 
 
@@ -169,13 +169,16 @@ def LAO_star(problema, gerar_graficos):
                 estimativa[vizinho] = calcula_heuristica(vizinho, meta)
         nos_expandidos.add(atual)
 
-        grafico.atualizar(estimativa, politica)
+        #grafico.atualizar(estimativa, politica)
         politica, nos_folhas = aplicar(nos_expandidos, no_pai, estimativa, problema['action'], meta)
         for p in politica:
             for i in problema['action'][politica[p]][p]:
                 if i[0] != p:
                     no_pai[i[0]] = no_pai.get(i[0], set())
                     no_pai[i[0]].add(p)
+
+
+    return politica
 # #
 # problema = {
 # 'states': ['robot-at-x1y1', 'robot-at-x2y1', 'robot-at-x3y1', 'robot-at-x1y2', 'robot-at-x2y2', 'robot-at-x3y2', 'robot-at-x1y3', 'robot-at-x2y3', 'robot-at-x3y3'],

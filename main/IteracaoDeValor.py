@@ -16,7 +16,7 @@ class iteracaoDeValor:
         #inicializacao com 0
         for estado in estados:
             estimativa[estado]=0
-        grafico=Janela.Grafico (estados, 20, 20, estimativa,politica)
+        #grafico=Janela.Grafico (estados, 20, 20, estimativa,politica)
 
         while True :
             delta=0
@@ -49,7 +49,7 @@ class iteracaoDeValor:
             #repassar as estimativas
 
             estimativa=nova_estimativa
-            grafico.atualizar (estimativa)
+            #grafico.atualizar (estimativa,politica)
             if alpha>(delta/len(estimativa)):
                 break
 
