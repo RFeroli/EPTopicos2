@@ -25,7 +25,7 @@ class PriorityQueue:
         return heapq.heappop(self.elements)[1]
 
 
-def aplicar(estados, no_pai, estimativa, acoes, meta, alpha=0.001):
+def aplicar(estados, atual, inicio, estimativa, acoes, meta, atingiu_meta, politica_antiga, no_pai, alpha=0.001):
 
     # estados = problema['states']
     # acoes = problema['action']
@@ -50,7 +50,7 @@ def aplicar(estados, no_pai, estimativa, acoes, meta, alpha=0.001):
             if estado == meta:
                 estimativa[estado]=0
                 nova_estimativa[estado]=0
-                politica[estado]='move-north'
+                politica[estado]='X'
                 continue
             # sera calculada a equcao de belman para cada estado
             minimo = math.inf
@@ -79,11 +79,22 @@ def aplicar(estados, no_pai, estimativa, acoes, meta, alpha=0.001):
 
     proximos_expansiveis = set()
     for x in politica:
+        if politica[x] == 'X':
+            continue
+        if x in politica_antiga and politica_antiga[x] and politica[x] != politica_antiga[x]:
+            ns = {t[0] for t in acoes[politica_antiga[x]][x]}
+            for i in ns:
+                no_pai[i].discard(x)
+            ns = {t[0] for t in acoes[politica[x]][x]}
+            for i in ns:
+                no_pai[i].add(x)
+
         for t in acoes[politica[x]][x]:
             if t[0] not in estados:
-                proximos_expansiveis.add(t[0])
+                if not atingiu_meta or (calcula_heuristica(inicio, t[0]) + calcula_heuristica(t[0], meta)) < estimativa[inicio]:
+                    proximos_expansiveis.add(t[0])
     # proximos_expansiveis = [acoes[politica[x]][x] for x in politica]
-    print(contador)
+    # print(contador)
     return politica, proximos_expansiveis
 
 
@@ -149,11 +160,14 @@ def LAO_star(problema, gerar_graficos):
 
     no_pai[inicio] = set()
     meta_plano = []
-    grafico = Janela.Grafico(problema['states'], 20, 20, estimativa, problema['states'])
+    atingiu_meta = False
+    # grafico = Janela.Grafico(problema['states'], 20, 20, estimativa, problema['states'])
     while nos_folhas:
-        grafico.atualizar(estimativa, politica)
+        # grafico.atualizar(estimativa, politica)
         atual = retorna_proximo_expandido(nos_folhas)
 
+        if atual == meta:
+            atingiu_meta = True
 
         for vizinho in lista_vizinhos(problema, atual):
             no_pai[vizinho] = no_pai.get(vizinho, set())
@@ -162,16 +176,33 @@ def LAO_star(problema, gerar_graficos):
             if vizinho in nos_expandidos:
                 continue
 
-            nos_folhas.add(vizinho)
+            h_vizinho = calcula_heuristica(vizinho, meta)
+            # if not atingiu_meta or h_vizinho < estimativa[inicio]:
+            #     nos_folhas.add(vizinho)
+
             if equivalentes(atual, meta):
                 estimativa[vizinho] = 0
             else:
-                estimativa[vizinho] = calcula_heuristica(vizinho, meta)
+                estimativa[vizinho] = h_vizinho
         nos_expandidos.add(atual)
 
-        grafico.atualizar(estimativa, politica)
-        politica, nos_folhas = aplicar(nos_expandidos, no_pai, estimativa, problema['action'], meta)
+        antecessores = {atual}
+        comprimento = 0
+        aux = {atual}
+        while len(antecessores)!=comprimento:
+            comprimento = len(antecessores)
+            aux2 = set()
+            for elemento in aux:
+                # for i in no_pai[elemento]:
+                antecessores = antecessores.union(no_pai[elemento])
+                aux2 = aux2.union(no_pai[elemento])
+            aux = aux2
+
+        # grafico.atualizar(estimativa, politica)
+        politica, nos_folhas = aplicar(antecessores, atual, inicio, estimativa, problema['action'], meta, atingiu_meta, politica, no_pai)
         for p in politica:
+            if politica[p] == 'X':
+                continue
             for i in problema['action'][politica[p]][p]:
                 if i[0] != p:
                     no_pai[i[0]] = no_pai.get(i[0], set())

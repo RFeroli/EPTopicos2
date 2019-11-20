@@ -12,13 +12,13 @@ problemas_nomes = [ 'navigation_1.net', 'navigation_2.net', 'navigation_3.net', 
                     'navigation_6.net', 'navigation_7.net', 'navigation_8.net', 'navigation_9.net', 'navigation_10.net']
 
 
-print('Problemas determinísticos\n')
+# print('Problemas determinísticos\n')
 gerar_graficos = False
-for p in problemas_nomes:
-    print('\nExecutando o problema {}'.format(p))
-    t = time.time()
-    LAO_star(deterministic_instances[p], gerar_graficos)
-    print('LAO * Executado em {} seg\n'.format(time.time() - t))
+# for p in problemas_nomes:
+#     print('\nExecutando o problema {}'.format(p))
+#     t = time.time()
+#     LAO_star(deterministic_instances[p], gerar_graficos)
+#     print('LAO * Executado em {} seg\n'.format(time.time() - t))
     # t = time.time()
     # IteracaoDeValor.iteracaoDeValor().aplicar(problema=deterministic_instances[p], alpha=0.1, gerar_graficos=gerar_graficos)
     # print('Iteracao de Valor Executado em {} seg'.format(time.time()-t))
