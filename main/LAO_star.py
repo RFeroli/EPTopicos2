@@ -25,7 +25,7 @@ class PriorityQueue:
         return heapq.heappop(self.elements)[1]
 
 
-def aplicar(estados, atual, inicio, estimativa, acoes, meta, atingiu_meta, politica_antiga, no_pai, alpha=0.001):
+def aplicar(estados, expandidos, inicio, estimativa, acoes, meta, atingiu_meta, politica_antiga, no_pai, alpha=0.001):
 
     # estados = problema['states']
     # acoes = problema['action']
@@ -81,20 +81,20 @@ def aplicar(estados, atual, inicio, estimativa, acoes, meta, atingiu_meta, polit
     for x in politica:
         if politica[x] == 'X':
             continue
-        if x in politica_antiga and politica_antiga[x] and politica[x] != politica_antiga[x]:
+        if x in politica_antiga:
             ns = {t[0] for t in acoes[politica_antiga[x]][x]}
             for i in ns:
                 no_pai[i].discard(x)
-            ns = {t[0] for t in acoes[politica[x]][x]}
-            for i in ns:
-                no_pai[i].add(x)
+        ns = {t[0] for t in acoes[politica[x]][x]}
+        for i in ns:
+            no_pai[i].add(x)
 
         for t in acoes[politica[x]][x]:
-            if t[0] not in estados:
-                if not atingiu_meta or (calcula_heuristica(inicio, t[0]) + calcula_heuristica(t[0], meta)) < estimativa[inicio]:
-                    proximos_expansiveis.add(t[0])
+            if t[0] not in expandidos:
+                # if not atingiu_meta or (calcula_heuristica(inicio, t[0]) + calcula_heuristica(t[0], meta)) < estimativa[inicio]:
+                proximos_expansiveis.add(t[0])
     # proximos_expansiveis = [acoes[politica[x]][x] for x in politica]
-    # print(contador)
+    #print(contador)
     return politica, proximos_expansiveis
 
 
@@ -154,59 +154,75 @@ def LAO_star(problema, gerar_graficos):
     heuristica_inicio = calcula_heuristica(inicio, meta)
     estimativa = {inicio:heuristica_inicio}
     nos_expandidos = set()
-    politica = {inicio:None}
+    politica = {inicio:'move-south'}
     nos_folhas = {inicio}
     no_pai = {}
 
     no_pai[inicio] = set()
     meta_plano = []
     atingiu_meta = False
-    # grafico = Janela.Grafico(problema['states'], 20, 20, estimativa, problema['states'])
-    while nos_folhas:
-        # grafico.atualizar(estimativa, politica)
-        atual = retorna_proximo_expandido(nos_folhas)
+    # grafico = Janela.Grafico(problema['states'], 50, 50, estimativa, problema['states'])
+    while True:
+        while nos_folhas:
+            # grafico.atualizar(estimativa, politica)
+            atual = retorna_proximo_expandido(nos_folhas)
 
-        if atual == meta:
-            atingiu_meta = True
+            if atual == meta:
+                atingiu_meta = True
 
-        for vizinho in lista_vizinhos(problema, atual):
-            no_pai[vizinho] = no_pai.get(vizinho, set())
-            no_pai[vizinho].add(atual)
+            for vizinho in lista_vizinhos(problema, atual):
+                no_pai[vizinho] = set()
+                # no_pai[vizinho].add(atual)
 
-            if vizinho in nos_expandidos:
-                continue
+                if vizinho in nos_expandidos:
+                    continue
 
-            h_vizinho = calcula_heuristica(vizinho, meta)
-            # if not atingiu_meta or h_vizinho < estimativa[inicio]:
-            #     nos_folhas.add(vizinho)
+                h_vizinho = calcula_heuristica(vizinho, meta)
+                # if not atingiu_meta or h_vizinho < estimativa[inicio]:
+                #     nos_folhas.add(vizinho)
 
-            if equivalentes(atual, meta):
-                estimativa[vizinho] = 0
-            else:
-                estimativa[vizinho] = h_vizinho
-        nos_expandidos.add(atual)
+                if equivalentes(atual, meta):
+                    estimativa[vizinho] = 0
+                else:
+                    estimativa[vizinho] = h_vizinho
+            nos_expandidos.add(atual)
 
-        antecessores = {atual}
-        comprimento = 0
-        aux = {atual}
-        while len(antecessores)!=comprimento:
-            comprimento = len(antecessores)
-            aux2 = set()
-            for elemento in aux:
-                # for i in no_pai[elemento]:
-                antecessores = antecessores.union(no_pai[elemento])
-                aux2 = aux2.union(no_pai[elemento])
-            aux = aux2
+            antecessores = {atual}
+            comprimento = 0
+            aux = {atual}
+            while len(antecessores)!=comprimento:
+                comprimento = len(antecessores)
+                aux2 = set()
+                for elemento in aux:
+                    # for i in no_pai[elemento]:
+                    antecessores = antecessores.union(no_pai[elemento])
+                    aux2 = aux2.union(no_pai[elemento])
+                aux = aux2
 
-        # grafico.atualizar(estimativa, politica)
-        politica, nos_folhas = aplicar(antecessores, atual, inicio, estimativa, problema['action'], meta, atingiu_meta, politica, no_pai)
-        for p in politica:
-            if politica[p] == 'X':
-                continue
-            for i in problema['action'][politica[p]][p]:
-                if i[0] != p:
-                    no_pai[i[0]] = no_pai.get(i[0], set())
-                    no_pai[i[0]].add(p)
+            # print(atual)
+            # print(antecessores)
+            politica, nos_folhas_aux = aplicar(antecessores, nos_expandidos, inicio, estimativa, problema['action'], meta, atingiu_meta, politica, no_pai)
+            nos_folhas = nos_folhas.union(nos_folhas_aux)
+            # print(nos_folhas)
+            # grafico.atualizar(estimativa, politica)
+            # print('\n\n')
+
+        politica, nos_folhas = aplicar(nos_expandidos, nos_expandidos, inicio, estimativa, problema['action'], meta,
+                                           atingiu_meta, politica, no_pai)
+
+        if not nos_folhas:
+            # grafico.atualizar(estimativa, politica)
+            break
+        # for p in politica:
+        #     if politica[p] == 'X':
+        #         continue
+        #     for i in problema['action'][politica[p]][p]:
+        #         if i[0] != p:
+        #             no_pai[i[0]] = no_pai.get(i[0], set())
+        #             no_pai[i[0]].add(p)
+
+
+    return politica
 # #
 # problema = {
 # 'states': ['robot-at-x1y1', 'robot-at-x2y1', 'robot-at-x3y1', 'robot-at-x1y2', 'robot-at-x2y2', 'robot-at-x3y2', 'robot-at-x1y3', 'robot-at-x2y3', 'robot-at-x3y3'],
