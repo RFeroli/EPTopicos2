@@ -1,0 +1,12 @@
+robot-at-x76y104:move-south
+robot-at-x76y103:move-east
+robot-at-x77y103:move-east
+robot-at-x78y103:move-east
+robot-at-x79y103:move-east
+robot-at-x80y103:move-east
+robot-at-x81y103:move-north
+robot-at-x81y104:move-east
+robot-at-x82y104:move-east
+robot-at-x83y104:move-east
+robot-at-x84y104:move-east
+robot-at-x85y104:move-east

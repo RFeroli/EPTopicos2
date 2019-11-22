@@ -45,10 +45,10 @@ def extrair_resultados(nome,politica,problema):
 gerar_graficos = False
 for p in problemas_nomes:
     print('\nExecutando o problema {}'.format(p))
-    t = time.time()
-    lao=LAO_star(deterministic_instances[p], gerar_graficos)
-    print('LAO * Executado em {} seg'.format(time.time() - t))
-    print ("tamanho do plano {}\n".format(extrair_resultados(p+"_lao_",lao,deterministic_instances[p])))
+    # t = time.time()
+    # lao=LAO_star(deterministic_instances[p], gerar_graficos)
+    # print('LAO * Executado em {} seg'.format(time.time() - t))
+    # print ("tamanho do plano {}\n".format(extrair_resultados(p+"_lao_",lao,deterministic_instances[p])))
     t = time.time()
     iteracao=IteracaoDeValor.iteracaoDeValor().aplicar(problema=deterministic_instances[p], alpha=0.001, gerar_graficos=gerar_graficos)
     print('Iteracao de Valor Executado em {} seg'.format(time.time()-t))
@@ -58,16 +58,16 @@ for p in problemas_nomes:
 print('\n\nProblemas aleatórios\n')
 for p in problemas_nomes:
     print ('\nExecutando o problema {}'.format (p))
-    t = time.time ()
-    lao = LAO_star (random_instances[p], gerar_graficos)
-    print ('LAO * Executado em {} seg\n'.format (time.time () - t))
-    print ("tamanho do plano",extrair_resultados (p + "_lao", lao, deterministic_instances[p]))
+    # t = time.time ()
+    # lao = LAO_star (random_instances[p], gerar_graficos)
+    # print ('LAO * Executado em {} seg\n'.format (time.time () - t))
+    # print ("tamanho do plano",extrair_resultados (p + "_lao", lao, random_instances[p]))
     t = time.time ()
     iteracao = IteracaoDeValor.iteracaoDeValor ().aplicar (problema=random_instances[p], alpha=0.001,
                                                            gerar_graficos=gerar_graficos)
 
     print ('Iteracao de Valor Executado em {} seg'.format (time.time () - t))
-    print("tamanho do plano"+extrair_resultados (p + "_iteracao_de_valor", iteracao, deterministic_instances[p]))
+    print("tamanho do plano", extrair_resultados (p + "_iteracao_de_valor", iteracao, random_instances[p]))
 
 
 
