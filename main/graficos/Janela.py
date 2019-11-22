@@ -13,6 +13,7 @@ LARGURA=500
 class Grafico:
     def __init__(self,estados,h,w,estimativa,politica):
         this=self
+        self.foto=0
         self.politica=politica
         def initialization():
             this.raiz = Tk ()
@@ -44,6 +45,7 @@ class Grafico:
             y2=(j*(largura+2))+largura
 
             self.arrows[estado]=self.canvas.create_line (x1,y1,x2,y2, width=2, tags="tudo",arrow=tk.LAST,fill='blue')
+        self.canvas.bind("<Button-1>",self.click)
     def atualizar(self,estimativa, politica):
         for estado in politica:
             self.canvas.itemconfig (self.grid[estado], fill=ColorUtils.toHex(int(estimativa[estado]*3),int(estimativa[estado]*3),int(estimativa[estado]*3)))
@@ -93,4 +95,10 @@ class Grafico:
             self.seta_direita (self.grid[estado], self.arrows[estado])
 
 
+    def click(self,event):
 
+        self.canvas.postscript (
+            file="grafico_"+str(self.foto)+".ps",
+         colormode='color')
+
+        self.foto+=1
