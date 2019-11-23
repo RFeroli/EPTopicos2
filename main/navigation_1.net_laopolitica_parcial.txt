@@ -1,0 +1,15 @@
+robot-at-x7y19:move-west
+robot-at-x6y19:move-south
+robot-at-x6y18:move-west
+robot-at-x5y18:move-west
+robot-at-x4y18:move-south
+robot-at-x4y17:move-west
+robot-at-x3y17:move-west
+robot-at-x2y17:move-west
+robot-at-x1y17:move-south
+robot-at-x1y16:move-south
+robot-at-x1y15:move-south
+robot-at-x1y14:move-south
+robot-at-x1y13:move-south
+robot-at-x1y12:move-south
+robot-at-x1y11:move-south

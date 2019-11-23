@@ -1,0 +1,6 @@
+robot-at-x16y30:move-south
+robot-at-x16y29:move-south
+robot-at-x16y28:move-south
+robot-at-x16y27:move-south
+robot-at-x16y26:move-south
+robot-at-x16y25:move-east
