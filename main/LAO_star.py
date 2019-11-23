@@ -222,7 +222,7 @@ def LAO_star(problema, gerar_graficos):
         #             no_pai[i[0]].add(p)
 
 
-    return politica
+    return politica,estimativa
 # #
 # problema = {
 # 'states': ['robot-at-x1y1', 'robot-at-x2y1', 'robot-at-x3y1', 'robot-at-x1y2', 'robot-at-x2y2', 'robot-at-x3y2', 'robot-at-x1y3', 'robot-at-x2y3', 'robot-at-x3y3'],

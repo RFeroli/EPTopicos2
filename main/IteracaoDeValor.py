@@ -53,4 +53,4 @@ class iteracaoDeValor:
             if alpha>(delta/len(estimativa)):
                 break
 
-        return politica
+        return politica,estimativa
